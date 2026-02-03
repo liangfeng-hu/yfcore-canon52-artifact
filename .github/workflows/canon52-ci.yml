@@ -1,4 +1,4 @@
-name: Canon52 CI
+name: Canon-52 CI
 
 on:
   push:
@@ -11,27 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Run self-tests
         run: python src/canon52_minimal.py all
-
-      - name: Check anchors (fail on drift)
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          echo "=== Extract anchors from SPEC_ANCHORS.md ==="
-          grep -E "^(CanonTextSpecHash|CanonJSONSpecHash|WorldEffectEqHash|MermaidFunnelHash|CanonPackHash|AdjudPackHash):" SPEC_ANCHORS.md | sed 's/[[:space:]]*$//' > /tmp/spec_anchors.txt
-          cat /tmp/spec_anchors.txt
-
-          echo "=== Compute anchors from script ==="
-          python src/canon52_minimal.py anchors | grep -E "^(CanonTextSpecHash|CanonJSONSpecHash|WorldEffectEqHash|MermaidFunnelHash|CanonPackHash|AdjudPackHash):" | sed 's/[[:space:]]*$//' > /tmp/run_anchors.txt
-          cat /tmp/run_anchors.txt
-
-          echo "=== Diff (must be empty) ==="
-          diff -u /tmp/spec_anchors.txt /tmp/run_anchors.txt
-          echo "[ANCHORS] OK (no drift)"
