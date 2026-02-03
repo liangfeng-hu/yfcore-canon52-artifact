@@ -1,0 +1,117 @@
+{
+  "spec": "CanonText+CanonJSON minimal v1 (NFC/LF/trim-trailing-space; JSON sort keys; type-aware list sort; forbid floats; forbid tabs/control/zero-width)",
+  "vectors": [
+    {
+      "id": "V01_JSON_KEY_ORDER",
+      "kind": "json",
+      "raw": "{\"b\":1,\"a\":2}",
+      "expected": "hash",
+      "expected_hash": "d3626ac30a87e6f7a6428233b3c68299976865fa5508e4267c5415c76af7a772"
+    },
+    {
+      "id": "V02_JSON_NESTED",
+      "kind": "json",
+      "raw": "{\"z\":{\"b\":true,\"a\":false},\"a\":[3,1,2]}",
+      "expected": "hash",
+      "expected_hash": "3d0769b3e8a4b8d382c44aacb96ad0c667149d708f88a62972e1fade3c142634"
+    },
+    {
+      "id": "V03_JSON_LIST_SORT",
+      "kind": "json",
+      "raw": "{\"list\":[13,15,15,2]}",
+      "expected": "hash",
+      "expected_hash": "641cd77956bf4225959f52bbb81e8996ef0ad9da7da28c822abddf60a88d08bb"
+    },
+    {
+      "id": "V04_JSON_NEWLINES",
+      "kind": "json",
+      "raw": "{\n  \"b\": 1,\r\n  \"a\": 2\n}",
+      "expected": "hash",
+      "expected_hash": "d3626ac30a87e6f7a6428233b3c68299976865fa5508e4267c5415c76af7a772"
+    },
+    {
+      "id": "V05_TEXT_NEWLINES",
+      "kind": "text",
+      "raw": "line1\r\nline2\r\n",
+      "expected": "hash",
+      "expected_hash": "2751a3a2f303ad21752038085e2b8c5f98ecff61a2e4ebbd43506a941725be80"
+    },
+    {
+      "id": "V06_TEXT_NFC_E_ACUTE",
+      "kind": "text",
+      "raw": "é",
+      "expected": "hash",
+      "expected_hash": "4a99557e4033c3539de2eb65472017cad5f9557f7a0625a09f1c3f6e2ba69c4c"
+    },
+    {
+      "id": "V07_TEXT_NFC_A_RING",
+      "kind": "text",
+      "raw": "Å",
+      "expected": "hash",
+      "expected_hash": "0a94dc9d420d1142d6b71de60f9bf7e2f345a4d62c9f141b091539769ddf3075"
+    },
+    {
+      "id": "V08_JSON_NULL_BOOL",
+      "kind": "json",
+      "raw": "{\"n\":null,\"t\":true,\"f\":false}",
+      "expected": "hash",
+      "expected_hash": "22e00dc2f7b01420f940fbdbfbdf34fa0667cc6500186495023ba37722cbd05e"
+    },
+    {
+      "id": "V09_JSON_ACTIONSPEC_MIN",
+      "kind": "json",
+      "raw": "{\"domain\":\"WORLDWRITE\",\"action\":\"SET\",\"path\":\"/x\",\"value\":1}",
+      "expected": "hash",
+      "expected_hash": "ed3aacde835417ad0d420284fff346f68cc8cbcc0fa6bc5c227e965a15430a32"
+    },
+    {
+      "id": "V10_JSON_READMODEL_RECEIPT",
+      "kind": "json",
+      "raw": "{\"source\":\"db1\",\"query\":\"select 1\",\"digest\":\"abc\",\"verifier_refs\":[\"v1\"]}",
+      "expected": "hash",
+      "expected_hash": "8314895f57872f63364fe5535390f72253ab777290ef4c0fa5ec0fb95edb0f20"
+    },
+    {
+      "id": "V11_JSON_REASON_CODES",
+      "kind": "json",
+      "raw": "{\"reason\":\"FAIL_TCB3\",\"details\":{\"k\":\"v\"},\"code\":17}",
+      "expected": "hash",
+      "expected_hash": "77a96337d634e06afb63d42005ffb7ae3f0bdf2c588a6e368b114a5ef74e43f3"
+    },
+    {
+      "id": "V12_TEXT_TRAILING_SPACES",
+      "kind": "text",
+      "raw": "a  \n b \n",
+      "expected": "hash",
+      "expected_hash": "f4f84306f6f4eccf2a1daff1aa505ddf034dc048aa546786978aa0612f580c15"
+    },
+    {
+      "id": "R01_TEXT_CONTROL_CHAR",
+      "kind": "text",
+      "raw": "a\u0001b",
+      "expected": "error",
+      "expected_error": "CONTROL_CHAR_FORBIDDEN"
+    },
+    {
+      "id": "R02_JSON_FLOAT_FORBIDDEN",
+      "kind": "json",
+      "raw": "{\"x\":1.2}",
+      "expected": "error",
+      "expected_error": "FLOAT_FORBIDDEN"
+    },
+    {
+      "id": "R03_TEXT_ZERO_WIDTH",
+      "kind": "text",
+      "raw": "a\u200bb",
+      "expected": "error",
+      "expected_error": "ZERO_WIDTH_FORBIDDEN"
+    },
+    {
+      "id": "R04_TEXT_TAB_FORBIDDEN",
+      "kind": "text",
+      "raw": "a\tb",
+      "expected": "error",
+      "expected_error": "TAB_FORBIDDEN"
+    }
+  ]
+}
