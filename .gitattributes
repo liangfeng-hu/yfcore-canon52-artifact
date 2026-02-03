@@ -1,0 +1,7 @@
+# Force stable line endings for reproducible hashing
+* text=auto eol=lf
+
+*.py   text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+LICENSE text eol=lf
