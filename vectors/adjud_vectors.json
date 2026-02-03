@@ -1,0 +1,495 @@
+{
+  "spec": "Canon-52 minimal adjudicator v1 (SUPxANNO world-effect equivalence demo, SupportPack enabled)",
+  "vectors": [
+    {
+      "id": "A01_FAST_WORLD_ALLOW",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "FAST",
+        "d_t": "WORLD_ALLOW",
+        "AttackHard": 0,
+        "AttackSoft": 0,
+        "I_FLOW": 0,
+        "CommitUnique": 1,
+        "DeltaOmega": 5,
+        "OutAllowed": [
+          "WORLDWRITE",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL"
+        ],
+        "disable_planes": [],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "WORLD_ALLOW",
+          "Receipt_t": "ReceiptCard^FLOW",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": false,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [],
+          "Anchor_t": "ANCHOR_FAST"
+        }
+      }
+    },
+    {
+      "id": "A02_FAST_NO_COMMIT",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 0,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "FAST",
+        "d_t": "EVID_ALLOW",
+        "AttackHard": 0,
+        "AttackSoft": 0,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "WORLDWRITE",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL"
+        ],
+        "disable_planes": [],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "EVID_ALLOW",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_EVID_ALLOW"
+          ],
+          "Anchor_t": "ANCHOR_FAST"
+        }
+      }
+    },
+    {
+      "id": "A03_SOFT_ATTACK_SAFE",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "chi_poison": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "SAFE",
+        "d_t": "DENY",
+        "AttackHard": 0,
+        "AttackSoft": 1,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "Explain",
+          "EvidencePlan",
+          "SimPlan",
+          "REF",
+          "UNCERT"
+        ],
+        "disable_planes": [
+          "CLAIM",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL",
+          "WORLDWRITE",
+          "PROP",
+          "RENDER",
+          "INTERACT"
+        ],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "DENY",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_DENY"
+          ],
+          "Anchor_t": "ANCHOR_SAFE"
+        }
+      }
+    },
+    {
+      "id": "A04_HARD_ATTACK_BLACKHOLE",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "chi_touch": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "BLACKHOLE",
+        "d_t": "QUARANTINE",
+        "AttackHard": 1,
+        "AttackSoft": 0,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "REF"
+        ],
+        "disable_planes": [
+          "CLAIM",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL",
+          "WORLDWRITE",
+          "PROP",
+          "RENDER",
+          "INTERACT"
+        ],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "QUARANTINE",
+          "Receipt_t": "DenyPacket",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_QUARANTINE"
+          ],
+          "Anchor_t": "ANCHOR_BLACKHOLE"
+        }
+      }
+    },
+    {
+      "id": "A05_UNCERT_SAFE",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "uncertainty_flag": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "SAFE",
+        "d_t": "DENY",
+        "AttackHard": 0,
+        "AttackSoft": 1,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "Explain",
+          "EvidencePlan",
+          "SimPlan",
+          "REF",
+          "UNCERT"
+        ],
+        "disable_planes": [
+          "CLAIM",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL",
+          "WORLDWRITE",
+          "PROP",
+          "RENDER",
+          "INTERACT"
+        ],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "DENY",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_DENY"
+          ],
+          "Anchor_t": "ANCHOR_SAFE"
+        }
+      }
+    },
+    {
+      "id": "A06_INVALID_ID_SAFE",
+      "req": {
+        "valid_id": false,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "SAFE",
+        "d_t": "DENY",
+        "AttackHard": 0,
+        "AttackSoft": 0,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "Explain",
+          "EvidencePlan",
+          "SimPlan",
+          "REF",
+          "UNCERT"
+        ],
+        "disable_planes": [
+          "CLAIM",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL",
+          "WORLDWRITE",
+          "PROP",
+          "RENDER",
+          "INTERACT"
+        ],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "DENY",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_DENY"
+          ],
+          "Anchor_t": "ANCHOR_SAFE"
+        }
+      }
+    },
+    {
+      "id": "A07_PENDING_SAFE",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "pending": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "SAFE",
+        "d_t": "PENDING",
+        "AttackHard": 0,
+        "AttackSoft": 1,
+        "I_FLOW": 0,
+        "CommitUnique": 0,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "Explain",
+          "EvidencePlan",
+          "SimPlan",
+          "REF",
+          "UNCERT"
+        ],
+        "disable_planes": [
+          "CLAIM",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL",
+          "WORLDWRITE",
+          "PROP",
+          "RENDER",
+          "INTERACT"
+        ],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "PENDING",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_PENDING"
+          ],
+          "Anchor_t": "ANCHOR_SAFE"
+        }
+      }
+    },
+    {
+      "id": "A08_FAST_IFLOW_NONZERO",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 1,
+        "commit_unique": 1,
+        "world_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "FAST",
+        "d_t": "EVID_ALLOW",
+        "AttackHard": 0,
+        "AttackSoft": 0,
+        "I_FLOW": 1,
+        "CommitUnique": 1,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "WORLDWRITE",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL"
+        ],
+        "disable_planes": [],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "EVID_ALLOW",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 1,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_EVID_ALLOW"
+          ],
+          "Anchor_t": "ANCHOR_FAST"
+        }
+      }
+    },
+    {
+      "id": "A09_FAST_POLICY_ALLOW",
+      "req": {
+        "valid_id": true,
+        "proof_present": true,
+        "i_flow": 0,
+        "commit_unique": 1,
+        "world_allow": false,
+        "policy_allow": true,
+        "delta_omega_req": 5
+      },
+      "expected": {
+        "Route": "FAST",
+        "d_t": "POLICY_ALLOW",
+        "AttackHard": 0,
+        "AttackSoft": 0,
+        "I_FLOW": 0,
+        "CommitUnique": 1,
+        "DeltaOmega": 0,
+        "OutAllowed": [
+          "WORLDWRITE",
+          "PUBLISH",
+          "TX",
+          "BRIDGE",
+          "TOOL"
+        ],
+        "disable_planes": [],
+        "SupportOK": true,
+        "SupportPack": {
+          "d_t": "POLICY_ALLOW",
+          "Receipt_t": "ReceiptCard^FAIL",
+          "GateVector_t": {
+            "I_FLOW": 0,
+            "I_CORE_HEX": 0
+          },
+          "HookVector_t": {
+            "Pre-Action": true,
+            "Pre-Commit": true
+          },
+          "WritebackVector_t": {
+            "tombstone_redacted": true,
+            "ChainCont": 1
+          },
+          "ReasonCode_t": [
+            "REASON_POLICY_ALLOW"
+          ],
+          "Anchor_t": "ANCHOR_FAST"
+        }
+      }
+    }
+  ]
+}
