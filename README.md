@@ -81,3 +81,61 @@ flowchart TD
   Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
+
+Traceability (paper ↔ code)
+
+decide_route() implements Lemma 1 (ANNO-Route Consistency, minimal)
+
+bind_support_branch() implements Lemma 2 (SUP-Branch Binding, minimal)
+
+adjudicate() implements Lemma 3 (World-Effect Equivalence, SUP×ANNO) and outputs SupportPack
+
+SupportPack & interfaces
+
+This repo includes 3 interface docs to eliminate “semantic gaps” between paper ↔ artifact:
+
+SUPPORTPACK_SCHEMA.md — SupportPack schema, no silent denial, refusal must be supported
+
+LAW52_INTERFACE.md — Law52 interface extract (not full text), six-channel mapping
+
+EVIDENCE_KEY_REGISTRY.md — minimal evidence key registry (names only)
+
+Files
+
+src/canon52_minimal.py : checker-only adjudicator + selftests + anchors
+
+vectors/canon_vectors.json : canonicalization vectors
+
+vectors/adjud_vectors.json : adjudication vectors (includes SupportPack)
+
+SPEC_ANCHORS.md : sealed anchors (hashes)
+
+OPEN_SCIENCE_APPENDIX.md : artifact appendix (submission-ready)
+
+Safety boundary statement
+
+Checker-only. If you implement any real-world executor, keep it separate, gated, and off by default.
+
+IMPORTANT (for sealed anchors)
+
+If you change any of the following:
+
+README.md Mermaid block (this diagram)
+
+src/canon52_minimal.py (spec strings / MERMAID_FUNNEL / adjudication logic)
+
+vectors/*.json
+
+You MUST run:
+
+python src/canon52_minimal.py all (must PASS)
+
+python src/canon52_minimal.py anchors
+and then overwrite the hashes in SPEC_ANCHORS.md.
+
+
+复制方法（你不需要找任何位置）：
+1) 打开 GitHub 仓库 → 点 `README.md` → 右上角铅笔 Edit  
+2) **全选全部内容删除**  
+3) 把上面这一整段 README.md **原样粘贴进去**  
+4) Commit changes（提交说明写 `fix: README mermaid render` 即可）
