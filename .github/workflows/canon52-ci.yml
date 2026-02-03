@@ -1,18 +1,15 @@
-name: Canon-52 CI
+name: Print Anchors Once
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  verify:
+  print:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Run self-tests
-        run: python src/canon52_minimal.py all
+          python-version: '3.12'
+      - name: Print anchors
+        run: python src/canon52_minimal.py anchors
