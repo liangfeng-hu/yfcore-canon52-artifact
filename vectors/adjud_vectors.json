@@ -493,3 +493,6 @@
     }
   ]
 }
+
+python src\canon52_minimal.py all
+python src\canon52_minimal.py anchors
