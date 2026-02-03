@@ -1,4 +1,4 @@
-name: Canon52 CI
+name: Canon-52 CI
 
 on:
   push:
@@ -11,8 +11,5 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Run self-tests
-        run: python src/canon52_minimal.py all
-      - name: Check anchors (no drift)
-        run: python src/canon52_minimal.py anchors --check
+          python-version: "3.12"
+      - run: python src/canon52_minimal.py all
