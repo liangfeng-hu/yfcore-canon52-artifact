@@ -1,3 +1,9 @@
+[![CI](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml/badge.svg)](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml)
+[![Release](https://img.shields.io/github/v/release/liangfeng-hu/yfcore-canon52-artifact)](https://github.com/liangfeng-hu/yfcore-canon52-artifact/releases/latest)
+[![Verified PoC](https://img.shields.io/badge/Verified-PoC-brightgreen)](https://github.com/liangfeng-hu/yfcore-canon52-artifact)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org)
+
+
 # YFCore Canon-52 Artifact (Minimal Adjudicator + Vector Packs)  
 （最小可运行裁决器 + 向量集｜用于论文复现）
 
