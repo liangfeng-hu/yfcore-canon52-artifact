@@ -57,17 +57,17 @@ The Mermaid diagram below is **exactly the same** as the `MERMAID_FUNNEL` consta
 
 ```mermaid
 flowchart TD
-  subgraph Space[State Space & Inputs]
+  subgraph Space[State Space and Inputs]
     Input([Candidate Trajectory Gamma])
     Virus[Unknown Virus / Side Channel]
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{Harm/Touch Checks (Law52.1-52.6)}
+    Checks{Harm or Touch Checks (Law52)}
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{Route Decision (Lemma 1 & 2)}
+    Route{Route Decision (Lemma 1 and 2)}
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
@@ -79,11 +79,12 @@ flowchart TD
   BlackHole[BLACKHOLE / TOMBSTONE: DeltaOmega = 0]
 
   Input --> Checks
-  Checks -- "chi_harm / chi_touch" --> SafeState
-  Checks -- "Pass" --> Route
-  Route -- "AttackHard" --> BlackHole
-  Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST & Valid" --> Commit
-  Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
-  Commit -- "else" --> SafeState
+  Checks -->|chi_harm or chi_touch| SafeState
+  Checks -->|Pass| Route
+  Route -->|AttackHard| BlackHole
+  Route -->|AttackSoft / UNCERT / Pending| SafeState
+  Route -->|FAST and Valid| Commit
+  Commit -->|FAST and I_FLOW=0 and d_t=WORLD_ALLOW and CommitUnique=1| World
+  Commit -->|else| SafeState
   Virus -.->|Bypass attempt| Commit
+
