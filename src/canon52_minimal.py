@@ -44,35 +44,35 @@ CANON_JSON_SPEC = """CanonJSON v1: parse JSON with floats forbidden; recursively
 WORLD_EFFECT_EQ = """DeltaOmega!=0 <=> Route=FAST AND CommitUnique=1 AND I_FLOW=0 AND d_t=WORLD_ALLOW (SUPxANNO)."""
 
 # Mermaid funnel MUST match README.md block (for reproducible anchors)
-MERMAID_FUNNEL = """graph TD
+MERMAID_FUNNEL = """flowchart TD
   subgraph Space[State Space & Inputs]
-    Input([Candidate Trajectory Γ])
+    Input([Candidate Trajectory Gamma])
     Virus[Unknown Virus / Side Channel]
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{Harm/Touch Checks<br/>(Law52.1-52.6)}
+    Checks{Harm/Touch Checks (Law52.1-52.6)}
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{Route Decision<br/>(Lemma 1 & 2)}
+    Route{Route Decision (Lemma 1 & 2)}
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit{Needle-Eye Gate<br/>(Lemma 3)}
+    Commit{Needle-Eye Gate (Lemma 3)}
   end
 
-  World((World Effect<br/>ΔΩ ≠ 0))
-  SafeState[SAFE / REF / NOOP<br/>ΔΩ = 0]
-  BlackHole[BLACKHOLE / TOMBSTONE<br/>ΔΩ = 0]
+  World((World Effect: DeltaOmega != 0))
+  SafeState[SAFE / REF / NOOP: DeltaOmega = 0]
+  BlackHole[BLACKHOLE / TOMBSTONE: DeltaOmega = 0]
 
   Input --> Checks
-  Checks -- "χ_harm / χ_touch" --> SafeState
+  Checks -- "chi_harm / chi_touch" --> SafeState
   Checks -- "Pass" --> Route
   Route -- "AttackHard" --> BlackHole
   Route -- "AttackSoft / UNCERT / Pending" --> SafeState
   Route -- "FAST & Valid" --> Commit
-  Commit -- "FAST ∧ I_FLOW=0 ∧ d_t=WORLD_ALLOW ∧ CommitUnique=1" --> World
+  Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
 """
@@ -373,7 +373,7 @@ def default_canon_pack() -> Dict[str, Any]:
             "expected_hash": sha256_canon(kind, raw),
         })
     vectors.extend([
-        {"id": "R01_TEXT_CONTROL_CHAR", "kind": "text", "raw": "ab", "expected": "error", "expected_error": "CONTROL_CHAR_FORBIDDEN"},
+        {"id": "R01_TEXT_CONTROL_CHAR", "kind": "text", "raw": "a\u0001b", "expected": "error", "expected_error": "CONTROL_CHAR_FORBIDDEN"},
         {"id": "R02_JSON_FLOAT_FORBIDDEN", "kind": "json", "raw": "{\"x\":1.2}", "expected": "error", "expected_error": "FLOAT_FORBIDDEN"},
         {"id": "R03_TEXT_ZERO_WIDTH", "kind": "text", "raw": "a\u200bb", "expected": "error", "expected_error": "ZERO_WIDTH_FORBIDDEN"},
         {"id": "R04_TEXT_TAB_FORBIDDEN", "kind": "text", "raw": "a\tb", "expected": "error", "expected_error": "TAB_FORBIDDEN"},
