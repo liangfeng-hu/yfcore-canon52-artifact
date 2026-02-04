@@ -140,11 +140,6 @@ Then overwrite the hashes in SPEC_ANCHORS.md.
 
 ---
 
-# ✅ 2) 文件名称：.github/workflows/canon52-ci.yml（完整最终修正版，直接全量覆盖）
-
-> 这份修好：YAML 缩进正确、无隐藏字符、CI 能稳定跑。  
-> 仍保持“简单可靠”：跑 `all` + 打印 `anchors`（不做强制比对，避免你又被红叉折磨）。
-
 ```yaml
 name: Canon-52 CI
 
