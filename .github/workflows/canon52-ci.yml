@@ -1,10 +1,13 @@
-name: Canon52 CI
+name: Canon-52 CI
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
+permissions:
+  contents: read
 
 jobs:
   verify:
@@ -16,8 +19,8 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Run self-tests (must PASS)
+      - name: Run self-tests
         run: python src/canon52_minimal.py all
 
-      - name: Print anchors (info only; does NOT fail CI)
+      - name: Print anchors (info)
         run: python src/canon52_minimal.py anchors
