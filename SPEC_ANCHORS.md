@@ -38,7 +38,7 @@ Statement:
 ---
 
 ## 4) Mermaid funnel diagram anchor
-MermaidFunnelHash: b4c1bae2401844d9b06a13e41c3912e790f238144d13d9e14bb90a5423f616db
+MermaidFunnelHash: 24fb906a3f7987068c2e08262063f0533fa2b391c1bb54aeb5331d4b4361523a
 Source: `MERMAID_FUNNEL` constant in `src/canon52_minimal.py` (and identical block in README.md)
 
 ---
