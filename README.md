@@ -42,6 +42,9 @@ This artifact demonstrates **logical soundness** of the constitution *given* int
 ## Quick start
 See `RUN.md`. One-liner (Windows):
 
+```bash
+python src/canon52_minimal.py all
+
 Expected output:
 [CanonSelfTest] OK=16 FAIL=0
 [AdjudTest] OK=9 FAIL=0
@@ -53,23 +56,23 @@ The Mermaid diagram below is exactly the same as the MERMAID_FUNNEL constant in 
 (so python src/canon52_minimal.py anchors can compute its hash).
 flowchart TD
   subgraph Space[State Space and Inputs]
-    Input([Candidate Trajectory Gamma])
+    Input[Candidate Trajectory Gamma]
     Virus[Unknown Virus / Side Channel]
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{"Harm/Touch Checks (Law52.1-52.6)"}
+    Checks["Harm/Touch Checks (Law52.1-52.6)"]
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{"Route Decision (Lemma 1 & 2)"}
+    Route["Route Decision (Lemma 1 and 2)"]
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit{"Needle-Eye Gate (Lemma 3)"}
+    Commit["Needle-Eye Gate (Lemma 3)"]
   end
 
-  World(("World Effect: DeltaOmega != 0"))
+  World((World Effect: DeltaOmega != 0))
   SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
   BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
 
@@ -78,7 +81,7 @@ flowchart TD
   Checks -- "Pass" --> Route
   Route -- "AttackHard" --> BlackHole
   Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST & Valid" --> Commit
+  Route -- "FAST and Valid" --> Commit
   Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
@@ -128,48 +131,4 @@ vectors/*.json
 You MUST run:
 python src/canon52_minimal.py all
 python src/canon52_minimal.py anchors
-
 Then overwrite the hashes in SPEC_ANCHORS.md.
-
----
-
-## ✅ 文件 2：`src/canon52_minimal.py` 里 MERMAID_FUNNEL 替换块（只替换这一段）
-你打开 `src/canon52_minimal.py`，按 Ctrl+F 搜索 `MERMAID_FUNNEL = """`，把那一整段（直到结尾 `"""`）**全选删掉**，换成下面这段：
-
-```python
-MERMAID_FUNNEL = """flowchart TD
-  subgraph Space[State Space and Inputs]
-    Input([Candidate Trajectory Gamma])
-    Virus[Unknown Virus / Side Channel]
-  end
-
-  subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{"Harm/Touch Checks (Law52.1-52.6)"}
-  end
-
-  subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{"Route Decision (Lemma 1 & 2)"}
-  end
-
-  subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit{"Needle-Eye Gate (Lemma 3)"}
-  end
-
-  World(("World Effect: DeltaOmega != 0"))
-  SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
-  BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
-
-  Input --> Checks
-  Checks -- "chi_harm / chi_touch" --> SafeState
-  Checks -- "Pass" --> Route
-  Route -- "AttackHard" --> BlackHole
-  Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST & Valid" --> Commit
-  Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
-  Commit -- "else" --> SafeState
-  Virus -.->|Bypass attempt| Commit
-"""
-
-
-```bash
-python src/canon52_minimal.py all
