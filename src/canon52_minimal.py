@@ -7,15 +7,7 @@ YFCore Canon-52 - Minimal Runnable Adjudicator + Vector Packs (v1.1)
 Purpose (checker-only):
 1) Deterministic canonicalization & hash stability (CanonText / CanonJSON)
 2) Replayable adjudication of SUPxANNO world-effect equivalence (Lemma 3)
-   ΔΩ != 0  <=>  Route=FAST ∧ CommitUnique=1 ∧ I_FLOW=0 ∧ d_t=WORLD_ALLOW
 3) SupportPack semantics (Ω-SUP52): refusal must be supported (no silent denial)
-
-NOT included:
-- Full LawKernel-52 text
-- Any real-world executor (no external API calls, no DB/device writes)
-
-Assumption-TCB:
-- Correctness assumes integrity-protected execution (TEE / measured boot / hardened runtime).
 
 Usage:
   python src/canon52_minimal.py all
@@ -37,41 +29,39 @@ from typing import Any, Dict, List, Tuple
 # -----------------------------
 # Spec strings (anchors)
 # -----------------------------
-CANON_TEXT_SPEC = """CanonText v1: normalize newlines to LF; strip trailing spaces; NFC; forbid TAB, zero-width (ZWSP/ZWNJ/ZWJ/BOM), control chars (<0x20 except LF) and DEL."""
+CANON_TEXT_SPEC = "CanonText v1: normalize newlines to LF; strip trailing spaces; NFC; forbid TAB, zero-width (ZWSP/ZWNJ/ZWJ/BOM), control chars (<0x20 except LF) and DEL."
+CANON_JSON_SPEC = "CanonJSON v1: parse JSON with floats forbidden; recursively sort object keys; sort lists by type-aware ordering (null<bool<int<str<json-string>); dump with separators (, :) and ensure_ascii."
+WORLD_EFFECT_EQ = "DeltaOmega!=0 <=> Route=FAST AND CommitUnique=1 AND I_FLOW=0 AND d_t=WORLD_ALLOW (SUPxANNO)."
 
-CANON_JSON_SPEC = """CanonJSON v1: parse JSON with floats forbidden; recursively sort object keys; sort lists by type-aware ordering (null<bool<int<str<json-string>); dump with separators (, :) and ensure_ascii."""
-
-WORLD_EFFECT_EQ = """DeltaOmega!=0 <=> Route=FAST AND CommitUnique=1 AND I_FLOW=0 AND d_t=WORLD_ALLOW (SUPxANNO)."""
-
-# Mermaid funnel MUST match README.md block (for reproducible anchors)
+# Mermaid funnel MUST match README.md mermaid block (for reproducible anchors)
 MERMAID_FUNNEL = """flowchart TD
-  subgraph Space[State Space & Inputs]
-    Input([Candidate Trajectory Gamma])
+  subgraph Space[State Space and Inputs]
+    Input[Candidate Trajectory Gamma]
     Virus[Unknown Virus / Side Channel]
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{Harm/Touch Checks (Law52.1-52.6)}
+    Checks["Harm/Touch Checks (Law52.1-52.6)"]
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{Route Decision (Lemma 1 & 2)}
+    Route["Route Decision (Lemma 1 and 2)"]
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit{Needle-Eye Gate (Lemma 3)}
+    Commit["Needle-Eye Gate (Lemma 3)"]
   end
 
   World((World Effect: DeltaOmega != 0))
-  SafeState[SAFE / REF / NOOP: DeltaOmega = 0]
-  BlackHole[BLACKHOLE / TOMBSTONE: DeltaOmega = 0]
+  SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
+  BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
 
   Input --> Checks
   Checks -- "chi_harm / chi_touch" --> SafeState
   Checks -- "Pass" --> Route
   Route -- "AttackHard" --> BlackHole
   Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST & Valid" --> Commit
+  Route -- "FAST and Valid" --> Commit
   Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
@@ -223,7 +213,7 @@ def classify_attack(req: Dict[str, Any]) -> Tuple[int, int]:
 
 
 def decide_route(req: Dict[str, Any], attack_hard: int, attack_soft: int) -> str:
-    # Lemma 1 (minimal): ANNO-Route Consistency
+    # Lemma 1 (minimal)
     if attack_hard:
         return "BLACKHOLE"
     if req.get("uncertainty_flag"):
@@ -240,7 +230,7 @@ def decide_route(req: Dict[str, Any], attack_hard: int, attack_soft: int) -> str
 
 
 def bind_support_branch(route: str, req: Dict[str, Any], attack_hard: int, i_flow: int, commit_unique_final: int) -> str:
-    # Lemma 2 (minimal): SUP-Branch Binding
+    # Lemma 2 (minimal)
     if route == "FAST":
         if req.get("world_allow", True) and commit_unique_final == 1 and i_flow == 0:
             return "WORLD_ALLOW"
@@ -276,10 +266,9 @@ def adjudicate(req: Dict[str, Any]) -> Dict[str, Any]:
     commit_unique_final = commit_unique if route == "FAST" else 0
 
     d_t = bind_support_branch(route, req, attack_hard, i_flow, commit_unique_final)
-
     delta_omega_req = int(req.get("delta_omega_req", 1))
 
-    # Lemma 3: World-Effect Equivalence (SUPxANNO)
+    # Lemma 3: ΔΩ != 0 iff FAST ^ CommitUnique ^ I_FLOW=0 ^ WORLD_ALLOW
     delta_omega = (
         delta_omega_req
         if (route == "FAST" and commit_unique_final == 1 and i_flow == 0 and d_t == "WORLD_ALLOW")
@@ -296,7 +285,7 @@ def adjudicate(req: Dict[str, Any]) -> Dict[str, Any]:
         out_allowed = ["REF"]
         disable_planes = ["CLAIM", "PUBLISH", "TX", "BRIDGE", "TOOL", "WORLDWRITE", "PROP", "RENDER", "INTERACT"]
 
-    # SupportPack: refusal must be supported (no silent denial)
+    # SupportPack (no silent denial)
     reason_code_t: List[str] = [] if d_t == "WORLD_ALLOW" else [f"REASON_{d_t}"]
     if d_t == "WORLD_ALLOW":
         receipt_t = "ReceiptCard^FLOW"
@@ -331,80 +320,12 @@ def adjudicate(req: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-# -----------------------------
-# Default vector packs (fallback)
-# -----------------------------
-DEFAULT_HASH_VECTORS = [
-    ("V01_JSON_KEY_ORDER", "json", "{\"b\":1,\"a\":2}"),
-    ("V02_JSON_NESTED", "json", "{\"z\":{\"b\":true,\"a\":false},\"a\":[3,1,2]}"),
-    ("V03_JSON_LIST_SORT", "json", "{\"list\":[13,15,15,2]}"),
-    ("V04_JSON_NEWLINES", "json", "{\n  \"b\": 1,\r\n  \"a\": 2\n}"),
-    ("V05_TEXT_NEWLINES", "text", "line1\r\nline2\r\n"),
-    ("V06_TEXT_NFC_E_ACUTE", "text", "e\u0301"),
-    ("V07_TEXT_NFC_A_RING", "text", "A\u030A"),
-    ("V08_JSON_NULL_BOOL", "json", "{\"n\":null,\"t\":true,\"f\":false}"),
-    ("V09_JSON_ACTIONSPEC_MIN", "json", "{\"domain\":\"WORLDWRITE\",\"action\":\"SET\",\"path\":\"/x\",\"value\":1}"),
-    ("V10_JSON_READMODEL_RECEIPT", "json", "{\"source\":\"db1\",\"query\":\"select 1\",\"digest\":\"abc\",\"verifier_refs\":[\"v1\"]}"),
-    ("V11_JSON_REASON_CODES", "json", "{\"reason\":\"FAIL_TCB3\",\"details\":{\"k\":\"v\"},\"code\":17}"),
-    ("V12_TEXT_TRAILING_SPACES", "text", "a  \n b \n"),
-]
-
-DEFAULT_ADJUD_CASES = [
-    ("A01_FAST_WORLD_ALLOW", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A02_FAST_NO_COMMIT", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 0, "world_allow": True, "delta_omega_req": 5}),
-    ("A03_SOFT_ATTACK_SAFE", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 1, "chi_poison": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A04_HARD_ATTACK_BLACKHOLE", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 1, "chi_touch": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A05_UNCERT_SAFE", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 1, "uncertainty_flag": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A06_INVALID_ID_SAFE", {"valid_id": False, "proof_present": True, "i_flow": 0, "commit_unique": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A07_PENDING_SAFE", {"valid_id": True, "proof_present": True, "pending": True, "i_flow": 0, "commit_unique": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A08_FAST_IFLOW_NONZERO", {"valid_id": True, "proof_present": True, "i_flow": 1, "commit_unique": 1, "world_allow": True, "delta_omega_req": 5}),
-    ("A09_FAST_POLICY_ALLOW", {"valid_id": True, "proof_present": True, "i_flow": 0, "commit_unique": 1, "world_allow": False, "policy_allow": True, "delta_omega_req": 5}),
-]
-
-
-def default_canon_pack() -> Dict[str, Any]:
-    vectors: List[Dict[str, Any]] = []
-    for vid, kind, raw in DEFAULT_HASH_VECTORS:
-        vectors.append({
-            "id": vid,
-            "kind": kind,
-            "raw": raw,
-            "expected": "hash",
-            "expected_hash": sha256_canon(kind, raw),
-        })
-    vectors.extend([
-        {"id": "R01_TEXT_CONTROL_CHAR", "kind": "text", "raw": "a\u0001b", "expected": "error", "expected_error": "CONTROL_CHAR_FORBIDDEN"},
-        {"id": "R02_JSON_FLOAT_FORBIDDEN", "kind": "json", "raw": "{\"x\":1.2}", "expected": "error", "expected_error": "FLOAT_FORBIDDEN"},
-        {"id": "R03_TEXT_ZERO_WIDTH", "kind": "text", "raw": "a\u200bb", "expected": "error", "expected_error": "ZERO_WIDTH_FORBIDDEN"},
-        {"id": "R04_TEXT_TAB_FORBIDDEN", "kind": "text", "raw": "a\tb", "expected": "error", "expected_error": "TAB_FORBIDDEN"},
-    ])
-    return {
-        "spec": "CanonText+CanonJSON minimal v1 (NFC/LF/trim-trailing-space; JSON sort keys; type-aware list sort; forbid floats; forbid tabs/control/zero-width)",
-        "vectors": vectors,
-    }
-
-
-def default_adjud_pack() -> Dict[str, Any]:
-    vectors: List[Dict[str, Any]] = []
-    for vid, req in DEFAULT_ADJUD_CASES:
-        vectors.append({"id": vid, "req": req, "expected": adjudicate(req)})
-    return {
-        "spec": "Canon-52 minimal adjudicator v1 (SUPxANNO world-effect equivalence demo, SupportPack enabled)",
-        "vectors": vectors,
-    }
-
-
 def load_packs() -> Tuple[Dict[str, Any], Dict[str, Any]]:
     canon_path = os.path.join(vectors_dir(), "canon_vectors.json")
     adjud_path = os.path.join(vectors_dir(), "adjud_vectors.json")
-    if os.path.exists(canon_path) and os.path.exists(adjud_path):
-        return read_json(canon_path), read_json(adjud_path)
-    return default_canon_pack(), default_adjud_pack()
+    return read_json(canon_path), read_json(adjud_path)
 
 
-# -----------------------------
-# Test runners
-# -----------------------------
 def run_canon_selftest(pack: Dict[str, Any]) -> None:
     ok = 0
     fail = 0
