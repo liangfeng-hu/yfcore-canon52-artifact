@@ -42,25 +42,15 @@ This artifact demonstrates **logical soundness** of the constitution *given* int
 ## Quick start
 See `RUN.md`. One-liner (Windows):
 
-```bash
-python src/canon52_minimal.py all
-```
-
 Expected output:
-
-```text
 [CanonSelfTest] OK=16 FAIL=0
 [AdjudTest] OK=9 FAIL=0
 [ALL] PASS
-```
 
----
+Architecture (Physical Alignment Funnel)
 
-## Architecture (Physical Alignment Funnel)
-The Mermaid diagram below must be identical to the `MERMAID_FUNNEL` constant in `src/canon52_minimal.py`
-(so `python src/canon52_minimal.py anchors` can compute its hash).
-
-```mermaid
+The Mermaid diagram below is exactly the same as the MERMAID_FUNNEL constant in src/canon52_minimal.py
+(so python src/canon52_minimal.py anchors can compute its hash).
 flowchart TD
   subgraph Space[State Space and Inputs]
     Input([Candidate Trajectory Gamma])
@@ -68,73 +58,118 @@ flowchart TD
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks{Harm/Touch Checks (Law52.1-52.6)}
+    Checks{"Harm/Touch Checks (Law52.1-52.6)"}
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route{Route Decision (Lemma 1 and 2)}
+    Route{"Route Decision (Lemma 1 & 2)"}
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit{Needle-Eye Gate (Lemma 3)}
+    Commit{"Needle-Eye Gate (Lemma 3)"}
   end
 
-  World((World Effect: DeltaOmega != 0))
-  SafeState[SAFE / REF / NOOP: DeltaOmega = 0]
-  BlackHole[BLACKHOLE / TOMBSTONE: DeltaOmega = 0]
+  World(("World Effect: DeltaOmega != 0"))
+  SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
+  BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
 
   Input --> Checks
   Checks -- "chi_harm / chi_touch" --> SafeState
   Checks -- "Pass" --> Route
   Route -- "AttackHard" --> BlackHole
   Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST and Valid" --> Commit
+  Route -- "FAST & Valid" --> Commit
   Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
-```
 
----
+Traceability (paper ↔ code)
 
-## Traceability (paper ↔ code)
-- `decide_route()` implements **Lemma 1** (ANNO-Route Consistency, minimal)  
-- `bind_support_branch()` implements **Lemma 2** (SUP-Branch Binding, minimal)  
-- `adjudicate()` implements **Lemma 3** (World-Effect Equivalence, SUP×ANNO) and outputs **SupportPack**
+decide_route() implements Lemma 1 (ANNO-Route Consistency, minimal)
 
----
+bind_support_branch() implements Lemma 2 (SUP-Branch Binding, minimal)
 
-## SupportPack & interfaces
-- `SUPPORTPACK_SCHEMA.md` — SupportPack schema, no silent denial, refusal must be supported  
-- `LAW52_INTERFACE.md` — Law52 interface extract (not full text), six-channel mapping  
-- `EVIDENCE_KEY_REGISTRY.md` — minimal evidence key registry (names only)
+adjudicate() implements Lemma 3 (World-Effect Equivalence, SUP×ANNO) and outputs SupportPack
 
----
+SupportPack & interfaces
 
-## Files
-- `src/canon52_minimal.py` : checker-only adjudicator + selftests + anchors  
-- `vectors/canon_vectors.json` : canonicalization vectors  
-- `vectors/adjud_vectors.json` : adjudication vectors (includes SupportPack)  
-- `SPEC_ANCHORS.md` : sealed anchors (hashes)  
-- `OPEN_SCIENCE_APPENDIX.md` : artifact appendix (submission-ready)
+SUPPORTPACK_SCHEMA.md — SupportPack schema, no silent denial, refusal must be supported
 
----
+LAW52_INTERFACE.md — Law52 interface extract (not full text), six-channel mapping
 
-## Safety boundary statement
+EVIDENCE_KEY_REGISTRY.md — minimal evidence key registry (names only)
+
+Files
+
+src/canon52_minimal.py : checker-only adjudicator + selftests + anchors
+
+vectors/canon_vectors.json : canonicalization vectors
+
+vectors/adjud_vectors.json : adjudication vectors (includes SupportPack)
+
+SPEC_ANCHORS.md : sealed anchors (hashes)
+
+OPEN_SCIENCE_APPENDIX.md : artifact appendix (submission-ready)
+
+Safety boundary statement
+
 Checker-only. If you implement any real-world executor, keep it separate, gated, and off by default.
 
----
+IMPORTANT (for sealed anchors)
 
-## IMPORTANT (for sealed anchors)
 If you change any of:
-- README Mermaid block (this diagram)
-- `src/canon52_minimal.py` (spec strings / MERMAID_FUNNEL / adjudication logic)
-- `vectors/*.json`
+
+README Mermaid block (this diagram)
+
+src/canon52_minimal.py (spec strings / MERMAID_FUNNEL / adjudication logic)
+
+vectors/*.json
 
 You MUST run:
+python src/canon52_minimal.py all
+python src/canon52_minimal.py anchors
+
+Then overwrite the hashes in SPEC_ANCHORS.md.
+
+---
+
+## ✅ 文件 2：`src/canon52_minimal.py` 里 MERMAID_FUNNEL 替换块（只替换这一段）
+你打开 `src/canon52_minimal.py`，按 Ctrl+F 搜索 `MERMAID_FUNNEL = """`，把那一整段（直到结尾 `"""`）**全选删掉**，换成下面这段：
+
+```python
+MERMAID_FUNNEL = """flowchart TD
+  subgraph Space[State Space and Inputs]
+    Input([Candidate Trajectory Gamma])
+    Virus[Unknown Virus / Side Channel]
+  end
+
+  subgraph L52[Layer 1: Law52 Constitutional Immunity]
+    Checks{"Harm/Touch Checks (Law52.1-52.6)"}
+  end
+
+  subgraph L51[Layer 2: Law51 Purification Routing]
+    Route{"Route Decision (Lemma 1 & 2)"}
+  end
+
+  subgraph L8[Layer 3: Law8 Needle's Eye]
+    Commit{"Needle-Eye Gate (Lemma 3)"}
+  end
+
+  World(("World Effect: DeltaOmega != 0"))
+  SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
+  BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
+
+  Input --> Checks
+  Checks -- "chi_harm / chi_touch" --> SafeState
+  Checks -- "Pass" --> Route
+  Route -- "AttackHard" --> BlackHole
+  Route -- "AttackSoft / UNCERT / Pending" --> SafeState
+  Route -- "FAST & Valid" --> Commit
+  Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
+  Commit -- "else" --> SafeState
+  Virus -.->|Bypass attempt| Commit
+"""
+
 
 ```bash
 python src/canon52_minimal.py all
-python src/canon52_minimal.py anchors
-```
-
-Then overwrite the hashes in `SPEC_ANCHORS.md`.
