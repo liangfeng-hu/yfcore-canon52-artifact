@@ -4,6 +4,8 @@
 [![License](https://img.shields.io/github/license/liangfeng-hu/yfcore-canon52-artifact)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Artifact](https://img.shields.io/badge/artifact-v1.1-blue)
+[![Release v1.1.0](https://img.shields.io/github/v/release/liangfeng-hu/yfcore-canon52-artifact)](https://github.com/liangfeng-hu/yfcore-canon52-artifact/releases/tag/v1.1.0)
+
 
 （最小可运行裁决器 + 向量集｜用于论文复现）
 
