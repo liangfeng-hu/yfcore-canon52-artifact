@@ -1,4 +1,4 @@
-name: Canon-52 CI
+name: Canon52 CI
 
 on:
   push:
@@ -11,8 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-      - name: Run self-tests
+          python-version: '3.12'
+
+      - name: Run self-tests (must PASS)
         run: python src/canon52_minimal.py all
+
+      - name: Print anchors (info only; does NOT fail CI)
+        run: python src/canon52_minimal.py anchors
