@@ -1,6 +1,6 @@
 # YFCore Canon-52 Artifact (Minimal Adjudicator + Vector Packs)
 
-[![Canon-52 CI](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml/badge.svg)](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml)
+[![Canon-52 CI](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml/badge.svg?branch=main)](https://github.com/liangfeng-hu/yfcore-canon52-artifact/actions/workflows/canon52-ci.yml?query=branch%3Amain)
 [![License](https://img.shields.io/github/license/liangfeng-hu/yfcore-canon52-artifact)](LICENSE)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Artifact](https://img.shields.io/badge/artifact-v1.1-blue)
