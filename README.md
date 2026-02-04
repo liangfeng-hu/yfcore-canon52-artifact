@@ -5,6 +5,10 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Artifact](https://img.shields.io/badge/artifact-v1.1-blue)
 
+Checker-only Canon-52 artifact: a minimal zero-dependency adjudicator with sealed vector packs and reproducible anchors.  
+Implements Law52 constitutional immunity checks (Harm/Touch, Route, Needle-Eye) for verifiable safe-state enforcement.  
+See README.md for full specification and self-tests.
+
 （最小可运行裁决器 + 向量集｜用于论文复现）
 
 **Paper focus:** Physical Alignment（物理对齐：对齐 = 状态空间不可达性）  
@@ -56,23 +60,23 @@ The Mermaid diagram below is exactly the same as the MERMAID_FUNNEL constant in 
 (so python src/canon52_minimal.py anchors can compute its hash).
 flowchart TD
   subgraph Space[State Space and Inputs]
-    Input[Candidate Trajectory Gamma]
+    Input([Candidate Trajectory Gamma])
     Virus[Unknown Virus / Side Channel]
   end
 
   subgraph L52[Layer 1: Law52 Constitutional Immunity]
-    Checks["Harm/Touch Checks (Law52.1-52.6)"]
+    Checks{"Harm/Touch Checks (Law52.1-52.6)"}
   end
 
   subgraph L51[Layer 2: Law51 Purification Routing]
-    Route["Route Decision (Lemma 1 and 2)"]
+    Route{"Route Decision (Lemma 1 & 2)"}
   end
 
   subgraph L8[Layer 3: Law8 Needle's Eye]
-    Commit["Needle-Eye Gate (Lemma 3)"]
+    Commit{"Needle-Eye Gate (Lemma 3)"}
   end
 
-  World((World Effect: DeltaOmega != 0))
+  World(("World Effect: DeltaOmega != 0"))
   SafeState["SAFE / REF / NOOP: DeltaOmega = 0"]
   BlackHole["BLACKHOLE / TOMBSTONE: DeltaOmega = 0"]
 
@@ -81,7 +85,7 @@ flowchart TD
   Checks -- "Pass" --> Route
   Route -- "AttackHard" --> BlackHole
   Route -- "AttackSoft / UNCERT / Pending" --> SafeState
-  Route -- "FAST and Valid" --> Commit
+  Route -- "FAST & Valid" --> Commit
   Commit -- "FAST AND I_FLOW=0 AND d_t=WORLD_ALLOW AND CommitUnique=1" --> World
   Commit -- "else" --> SafeState
   Virus -.->|Bypass attempt| Commit
@@ -129,6 +133,8 @@ src/canon52_minimal.py (spec strings / MERMAID_FUNNEL / adjudication logic)
 vectors/*.json
 
 You MUST run:
+
 python src/canon52_minimal.py all
 python src/canon52_minimal.py anchors
+
 Then overwrite the hashes in SPEC_ANCHORS.md.
